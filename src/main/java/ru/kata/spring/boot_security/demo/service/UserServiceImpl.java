@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.UserDao;
@@ -19,12 +20,12 @@ public class UserServiceImpl implements UserService {
 
     private UserDao userDao;
 
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private PasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserServiceImpl (UserDao userDao, BCryptPasswordEncoder bCryptPasswordEncoder,  RoleService roleService) {
+    public UserServiceImpl (UserDao userDao, PasswordEncoder passwordEncoder,  RoleService roleService) {
         this.userDao = userDao;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.bCryptPasswordEncoder = passwordEncoder;
         this.roleService = roleService;
     }
 
@@ -37,7 +38,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void add(User user, String password, String[] roles) {
-        user.setPassword(password);
+        user.setPassword(bCryptPasswordEncoder.encode(password));
         user.setRoles(Arrays.stream(roles).map(r -> roleService.getRole(r)).collect(Collectors.toList()));
         userDao.add(user);
     }
