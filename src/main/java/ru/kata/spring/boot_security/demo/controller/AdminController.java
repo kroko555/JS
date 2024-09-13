@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
@@ -27,41 +28,44 @@ public class AdminController {
         return "users";
     }
 
-    @GetMapping("/addUser")
+    @GetMapping("addUser")
     public String addUser(Model model) {
         model.addAttribute("user", new User());
         return "new";
     }
 
-    @PostMapping("/addUser")
+    @PostMapping()
     public String createUser(@ModelAttribute("user")  User user,
                              BindingResult bindingResult,
                              @RequestParam(value = "rolesList") String[] roles,
-                             @ModelAttribute("pass") String pass) {
+                             @ModelAttribute("password") String password,
+                             @ModelAttribute("username") String username) {
+        System.out.println("Начало метода");
         if (bindingResult.hasErrors()) {
             return "/new";
         }
-        userService.add(user, pass, roles);
+        userService.add(user, password, roles, username);
+        System.out.println("Конец метода");
         return "redirect:/admin";
     }
 
-    @GetMapping("/edit")
-    public String editUser(Model model, @RequestParam Long id) {
+    @GetMapping("edit/{id}")
+    public String editUser(Model model, @PathVariable(name = "id") Long id) {
         model.addAttribute("user", userService.getUserById(id));
         return "edit";
     }
 
-    @PostMapping("/edit")
-    public String updateUser(@ModelAttribute("user")  User user,
-                             @RequestParam(value = "rolesList") String[] roles,
-                             @ModelAttribute("pass") String pass) {
-        userService.update(user, roles);
-        return "redirect:/users";
+    @PostMapping("edit/{id}")
+    public String updateUser(@ModelAttribute("user")  User user) {
+        System.out.println("Начало метода обновления");
+        userService.update(user);
+        System.out.println("Конец метода обновления");
+        return "redirect:/admin";
     }
 
-    @GetMapping("/delete")
-    public String deleteUser(Model model, @RequestParam Long id) {
+    @PostMapping("delete")
+    public String deleteUser(@RequestParam Long id) {
         userService.delete(id);
-        return "redirect:/users";
+        return "redirect:/admin";
     }
 }

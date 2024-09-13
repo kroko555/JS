@@ -16,11 +16,17 @@
         <td th:utext="${user.getName()}">Name</td>
         <td th:utext="${user.getCountry()}">Country</td>
         <td th:utext="${user.getAge()}">Age</td>
-        <td><a th:href="@{users/edit(id=${user.getId()})}">Update user</a></td>
-        <td><a th:href="@{users/delete(id=${user.getId()})}">Delete user</a></td>
+        <td th:utext="${user.getId()}">Id</td>
+        <td><a th:href="@{/admin/edit/{id}(id=${user.getId()})}">Update user</a></td>
     </tr>
 </table>
-<br/>
-<a href="admin/users/addUser">New user</a>
+<form method="post" action="/admin/delete">
+    <label>
+        <input type="number" name="id" placeholder="id">
+    </label>
+    <input type="submit" value="Delete User">
+</form>
+<a href="addUser">New user</a>
+<a th:href="@{/logout}">Logout</a>
 </body>
 </html>

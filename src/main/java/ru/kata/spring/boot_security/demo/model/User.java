@@ -29,9 +29,9 @@ public class User implements UserDetails {
 
     private Byte age;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String username;
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String password;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -80,6 +80,9 @@ public class User implements UserDetails {
     }
     public void setPassword(String password) {
         this.password = password;
+    }
+    public void setUsername(String username) {
+        this.username = username;
     }
     public List<Role> getRoles() {
         return roles;

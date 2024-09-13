@@ -33,16 +33,16 @@ public class DbInit {
             roleService.saveRole(user);
 
 
-        User userAdmin = new User("Artem", "Russia", (byte) 23, "user");
-        User userUser = new User("Phil", "USA", (byte) 76, "admin");
+        User userAdmin = new User("Artem", "Russia", (byte) 23, "admin");
+        User userUser = new User("Phil", "USA", (byte) 76, "user");
         String[] rolesAdmin = {"ROLE_ADMIN", "ROLE_USER"};
         String[] rolesUser = {"ROLE_USER"};
 
 
-            userService.add(userAdmin, "admin", rolesAdmin);
+            userService.add(userAdmin, "admin", rolesAdmin, "admin");
 
 
-            userService.add(userUser, "user", rolesUser);
+            userService.add(userUser, "user", rolesUser, "user");
 
     }
 }

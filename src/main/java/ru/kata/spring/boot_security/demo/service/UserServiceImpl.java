@@ -37,7 +37,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void add(User user, String password, String[] roles) {
+    public void add(User user, String password, String[] roles, String username) {
+        user.setUsername(username);
         user.setPassword(bCryptPasswordEncoder.encode(password));
         user.setRoles(Arrays.stream(roles).map(r -> roleService.getRole(r)).collect(Collectors.toList()));
         userDao.add(user);
@@ -45,8 +46,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void update(User user, String[] roles) {
-        user.setRoles(Arrays.stream(roles).map(r -> roleService.getRole(r)).collect(Collectors.toList()));
+    public void update(User user) {
         userDao.update(user);
     }
 

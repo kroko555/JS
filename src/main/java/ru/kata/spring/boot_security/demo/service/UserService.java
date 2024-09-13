@@ -10,9 +10,9 @@ import java.util.List;
 public interface UserService {
     List<User> getUsers();
 
-    void add(User user, String password, String[] roles);
+    void add(User user, String password, String[] roles, String username);
 
-    void update(User user, String[] roles);
+    void update(User user);
 
     void delete(Long id);
 
