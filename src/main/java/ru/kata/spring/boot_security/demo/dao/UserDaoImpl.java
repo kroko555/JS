@@ -14,6 +14,7 @@ public class UserDaoImpl implements UserDao {
 
     @PersistenceContext
     private EntityManager em;
+
     @Override
     public List<User> getUsers() {
         return em.createQuery("FROM User", User.class).getResultList();

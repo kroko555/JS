@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserServiceImpl (UserDao userDao, PasswordEncoder passwordEncoder,  RoleService roleService) {
+    public UserServiceImpl(UserDao userDao, PasswordEncoder passwordEncoder, RoleService roleService) {
         this.userDao = userDao;
         this.bCryptPasswordEncoder = passwordEncoder;
         this.roleService = roleService;

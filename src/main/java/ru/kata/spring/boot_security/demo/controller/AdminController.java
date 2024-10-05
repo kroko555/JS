@@ -10,6 +10,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
+import java.security.Principal;
+
 
 @Controller
 @RequestMapping("/admin")
@@ -23,9 +25,11 @@ public class AdminController {
     }
 
     @GetMapping()
-    public String users(Model model) {
+    public String users(Model model, Principal principal) {
+        User user = userService.findUserByUsername(principal.getName());
         model.addAttribute("users", userService.getUsers());
-        return "users";
+        model.addAttribute("user", user);
+        return "test";
     }
 
     @GetMapping("addUser")
@@ -34,18 +38,17 @@ public class AdminController {
         return "new";
     }
 
-    @PostMapping()
-    public String createUser(@ModelAttribute("user")  User user,
+    @PostMapping("/addUser")
+    public String createUser(@ModelAttribute("user") User user,
                              BindingResult bindingResult,
-                             @RequestParam(value = "rolesList") String[] roles,
+                             @RequestParam(value = "rolesList", required = false) String[] roles,
                              @ModelAttribute("password") String password,
                              @ModelAttribute("username") String username) {
-        System.out.println("Начало метода");
+        System.out.println("Метод addUser был вызван");
         if (bindingResult.hasErrors()) {
             return "/new";
         }
         userService.add(user, password, roles, username);
-        System.out.println("Конец метода");
         return "redirect:/admin";
     }
 
@@ -56,7 +59,7 @@ public class AdminController {
     }
 
     @PostMapping("edit/{id}")
-    public String updateUser(@ModelAttribute("user")  User user) {
+    public String updateUser(@ModelAttribute("user") User user) {
         System.out.println("Начало метода обновления");
         userService.update(user);
         System.out.println("Конец метода обновления");

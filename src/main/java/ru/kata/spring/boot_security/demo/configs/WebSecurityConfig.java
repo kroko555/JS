@@ -27,14 +27,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final SuccessUserHandler successUserHandler;
 
 
-
     @Autowired
     public WebSecurityConfig(CustomUserDetailsService customUserDetailsService, SuccessUserHandler successUserHandler) {
         this.customUserDetailsService = customUserDetailsService;
         this.successUserHandler = successUserHandler;
     }
-
-
 
 
     @Override
