@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+
+        .btn-custom {
+            background-color: #007bff; /* Синий цвет */
+            border: none; /* Убираем границу */
+            color: white; /* Цвет текста */
+        }
+        .btn-custom:hover {
+            background-color: #6c757d; /* Серый цвет при наведении */
+        }
+
+        .user-info-bar {
+            background-color: #D3D3D3;
+            padding: 10px 15px;
+            height: 50px;
+            display: flex; /* Используем flexbox для расположения элементов */
+            justify-content: space-between; /* Размещаем элементы по бокам */
+        }
+
+        .side-container {
+            width: 200px; /* Задайте ширину контейнера */
+            height: calc(100vh - 50px); /* Высота на весь экран */
+            background-color: white; /* Цвет фона */
+            position: fixed; /* Фиксированная позиция */
+            left: 0; /* Сдвинуть влево */
+            top: 0; /* Сдвинуть вверх */
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1); /* Тень для визуального эффекта */
+            margin-top: 50px;
+        }
+
+        .logout-button {
+            background-color: red; /* Цвет кнопки Logout */
+            border: none; /* Убираем рамку */
+            color: white; /* Цвет текста кнопки */
+            padding: 5px 20px; /* Паддинг для удобства */
+            cursor: pointer; /* Указатель при наведении */
+            border-radius: 5px; /* Закругление углов кнопки */
+        }
+
+        .side-container ul {
+            padding: 20px; /* Отступы для списка кнопок */
+            list-style: none; /* Убрать маркеры списка */
+        }
+
+        .side-container li {
+            margin-bottom: 10px; /* Отступ между кнопками */
+        }
+
+        .btn-update, .btn-delete {
+            display: inline-block; /* Чтобы кнопки отображались как строки */
+            padding: 10px 20px; /* Отступы для кнопок */
+            text-decoration: none; /* Убирает подчеркивание */
+            border: none; /* Убирает рамку */
+            background-color: #007bff; /* Цвет фона для кнопки Update (можно изменить) */
+            color: white; /* Цвет текста */
+            cursor: pointer; /* Курсор при наведении */
+        }
+
+        .btn-update:hover {
+            background-color: #006f99; /* Темнее при наведении */
+        }
+
+        .btn-delete:hover {
+            background-color: #b71c1c; /* Темнее при наведении */
+        }
+    </style>
+</head>
+<body>
+
+<div class="user-info-bar">
+    <div class="container d-flex justify-content-between">
+        <div>
+            <strong>Пользователь:</strong> <span th:text="${user.username}"></span>
+        </div>
+        <div>
+            <strong>Роли:</strong> <span th:each="roles : ${user.getRoles()}" th:utext="${roles.toString()}+'<br>  '"></span>
+        </div>
+    </div>
+    <div>
+        <a class="logout-button" href="/logout" role="button">Logout</a>
+    </div>
+</div>
+
+<div class="container mt-4 text-left" style="margin-left: 220px; padding: 20px;">
+    <h1>Admin Panel</h1>
+</div>
+
+<div class="side-container">
+    <ul>
+        <li>
+            <a href="/admin" class="btn btn-primary btn-block">Admin панель</a>
+        </li>
+        <li>
+            <a href="/user" class="btn btn-secondary btn-block">User панель</a>
+        </li>
+    </ul>
+</div>
+
+<div class="container mt-5">
+    <div class="mb-3">
+        <div class="d-flex justify-content-start">
+            <button class="btn btn-primary me-2" onclick="showTable()">Users Table</button>
+            <button class="btn btn-primary" id="newUserBtn">New User</button>
+        </div>
+    </div>
+
+    <div id="formContainer" style="display:none;"></div> <!-- Контейнер для формы -->
+
+    <div id="userTable">
+    <div class="mb-3">
+    <h2>All users</h2>
+    </div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Country</th>
+            <th>Age</th>
+            <th>ID</th>
+            <th>Roles</th>
+            <th style="text-align: center;">Update</th>
+            <th style="text-align: center;">Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.getName()}">Name</td>
+            <td th:text="${user.getCountry()}">Country</td>
+            <td th:text="${user.getAge()}">Age</td>
+            <td th:text="${user.getId()}">Id</td>
+            <td><span th:each="roles : ${user.getRoles()}" th:utext= "${roles.toString()}+'<br>  '">Roles</span></td>
+            <td style="text-align: center;">
+                <a th:href="@{/admin/edit/{id}(id=${user.getId()})}" class="btn-update">Update</a>
+                </td>
+                <td style="text-align: center;">
+                <form th:action="@{/admin/delete}" method="post" onsubmit="return confirm('Вы уверены, что хотите удалить этого пользователя?');"
+                      style="display:inline;">
+                    <input type="hidden" name="id" th:value="${user.id}">
+                    <button type="submit" class="btn-delete">Delete</button>
+                </form>
+                </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    document.getElementById("newUserBtn").onclick = function() {
+        fetch('/admin/addUser')  // AJAX-запрос для загрузки формы
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById("userTable").style.display = 'none';
+                document.getElementById("formContainer").innerHTML = html;
+                document.getElementById("formContainer").style.display = 'block';
+            });
+    };
+    function showTable() {
+        document.getElementById("formContainer").style.display = 'none';
+        document.getElementById("userTable").style.display = 'block';
+    }
+    document.querySelector('form').onsubmit = function() {
+        var select = document.getElementById('rolesList');
+        if (select.selectedOptions.length === 0) {
+            alert('Пожалуйста, выберите хотя бы одну роль.');
+            return false; // Предотвратить отправку формы
+        }
+    };
+</script>
+
+</body>
+</html>
