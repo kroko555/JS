@@ -7,10 +7,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -19,9 +23,19 @@ public class AdminController {
 
     private final UserService userService;
 
+    private final RoleService roleService;
+
     @Autowired
-    public AdminController(UserService userService) {
+    public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
+    }
+
+    @GetMapping("user")
+    public String user(Model model, Principal principal) {
+        User user = userService.findUserByUsername(principal.getName());
+        model.addAttribute("user", user);
+        return "useradmin";
     }
 
     @GetMapping()
@@ -41,7 +55,7 @@ public class AdminController {
     @PostMapping("/addUser")
     public String createUser(@ModelAttribute("user") User user,
                              BindingResult bindingResult,
-                             @RequestParam(value = "rolesList", required = false) String[] roles,
+                             @RequestParam(value = "roles") String[] roles,
                              @ModelAttribute("password") String password,
                              @ModelAttribute("username") String username) {
         System.out.println("Метод addUser был вызван");
@@ -55,13 +69,24 @@ public class AdminController {
     @GetMapping("edit/{id}")
     public String editUser(Model model, @PathVariable(name = "id") Long id) {
         model.addAttribute("user", userService.getUserById(id));
-        return "edit";
+        return "test";
     }
 
     @PostMapping("edit/{id}")
-    public String updateUser(@ModelAttribute("user") User user) {
+    public String updateUser(@ModelAttribute("user") User user, @PathVariable Long id, @RequestParam(value = "roles") String[] roles) {
         System.out.println("Начало метода обновления");
-        userService.update(user);
+        User actualUser = userService.getUserById(id);
+        actualUser.setUsername(user.getUsername());
+        actualUser.setPassword(user.getPassword());
+        List<Role> roleList = new ArrayList<>();
+        for (String roleName : roles) {
+            Role role = roleService.getRole(roleName);
+            if (role != null) {
+                roleList.add(role);
+            }
+        }
+        actualUser.setRoles(roleList);
+        userService.update(actualUser);
         System.out.println("Конец метода обновления");
         return "redirect:/admin";
     }

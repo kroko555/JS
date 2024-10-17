@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User admin</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+
+        .user-info-bar {
+            background-color: #f2f2f2;
+            padding: 10px 15px;
+            height: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center; /* Центрирование текста по вертикали */
+        }
+
+        .user-role-info {
+            font-size: 18px; /* Увеличиваем размер шрифта */
+            text-align: left; /* Выравнивание текста влево */
+        }
+
+        .user-role-info strong {
+            font-weight: bold; /* Установка жирного начертания для username */
+        }
+
+        .side-container {
+            width: 200px; /* Задайте ширину контейнера */
+            height: calc(100vh - 50px); /* Высота на весь экран */
+            background-color: white; /* Цвет фона */
+            position: fixed; /* Фиксированная позиция */
+            left: 0; /* Сдвинуть влево */
+            top: 0; /* Сдвинуть вверх */
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1); /* Тень для визуального эффекта */
+            margin-top: 50px;
+        }
+
+        .logout-button {
+            color: #333333; /* Темно-серый цвет текста */
+            text-decoration: none; /* Убирает подчеркивание */
+            transition: background-color 0.3s; /* Плавный переход цвета фона */
+        }
+
+        .logout-button:hover {
+            background-color: #e0e0e0; /* Немного светлее темно-серого при наведении */
+        }
+
+        .side-container ul {
+            padding: 20px; /* Отступы для списка кнопок */
+            list-style: none; /* Убрать маркеры списка */
+        }
+
+        .side-container li {
+            margin-bottom: 10px; /* Отступ между кнопками */
+        }
+
+    </style>
+</head>
+<body>
+<div class="user-info-bar">
+    <div class="container d-flex justify-content-start">
+        <div class="user-role-info" style="text-align: left; flex-grow: 1;">
+            <strong th:text="${user.username}"></strong>
+            <span> with roles: </span>
+            <span th:each="role : ${user.getRoles()}"
+                  th:text="${role} + (loop.last ? '' : ' ')" style="white-space: nowrap;"></span>
+        </div>
+    </div>
+    <div>
+        <a class="logout-button" href="/logout" role="button">Logout</a>
+    </div>
+</div>
+
+<div class="container mt-4 text-left" style="margin-left: 220px; padding: 20px;">
+    <h1>User Panel</h1>
+</div>
+
+<div class="side-container">
+    <ul>
+        <li>
+            <a href="/admin" class="btn btn-primary btn-block">Admin панель</a>
+        </li>
+        <li>
+            <a href="/admin/user" class="btn btn-secondary btn-block">User панель</a>
+        </li>
+    </ul>
+</div>
+
+<div class="container mt-5">
+    <div class="mb-3">
+        <div class="d-flex justify-content-start">
+        </div>
+    </div>
+    <div id="userTable">
+        <div class="mb-3">
+            <h2>About user</h2>
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Country</th>
+                <th>Age</th>
+                <th>ID</th>
+                <th>Roles</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:object="${user}">
+                <td th:utext="${user.getName()}">Name</td>
+                <td th:utext="${user.getCountry()}">Country</td>
+                <td th:utext="${user.getAge()}">Age</td>
+                <td th:utext="${user.getId()}">Id</td>
+                <td><span th:each="roles : ${user.getRoles()}" th:utext= "${roles.toString()}+'<br>  '">Roles</span></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</html>

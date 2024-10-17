@@ -31,9 +31,9 @@
         </div>
         <div class="mb-3">
             <label for="roles" class="form-label">Выберите роли:</label>
-            <select th:field="*{roles}" id="roles" class="form-control" multiple>
-                <option th:value="'ROLE_ADMIN'" th:text="'ADMIN'"></option>
-                <option th:value="'ROLE_USER'" th:text="'USER'" ></option>
+            <select name="rolesList" th:field="*{roles}" id="roles" class="form-control" multiple>
+                <option th:value="'ROLE_ADMIN'" th:text="ADMIN"></option>
+                <option th:value="'ROLE_USER'" th:text="USER" ></option>
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Добавить пользователя</button>

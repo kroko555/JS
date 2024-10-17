@@ -16,6 +16,13 @@
     <label for="age">ENTER age: </label>
     <input type="number" th:field="*{age}" id="age"/>
     <br><br>
+    <br/>
+    <label for="roles">Choose roles: </label>
+    <br/>
+    <select name="rolesList" th:field="*{roles}" id="roles" class="form-control" multiple>
+        <option th:value="'ROLE_ADMIN'" th:text="ADMIN"></option>
+        <option th:value="'ROLE_USER'" th:text="USER" ></option>
+    </select>
     <input type="submit" value="Save"/>
 </form>
 
