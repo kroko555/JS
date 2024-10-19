@@ -138,4 +138,10 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public String getRolesToString() {
+        String prefix = "ROLE_";
+        String str = roles.toString().replaceAll("^\\[|\\]$", "").replaceAll(prefix, "");
+        return str;
+    }
 }

@@ -2,6 +2,7 @@ package ru.kata.spring.boot_security.demo.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,10 +26,13 @@ public class AdminController {
 
     private final RoleService roleService;
 
+    private PasswordEncoder bCryptPasswordEncoder;
+
     @Autowired
-    public AdminController(UserService userService, RoleService roleService) {
+    public AdminController(UserService userService, RoleService roleService, PasswordEncoder bCryptPasswordEncoder) {
         this.userService = userService;
         this.roleService = roleService;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @GetMapping("user")
@@ -77,7 +81,7 @@ public class AdminController {
         System.out.println("Начало метода обновления");
         User actualUser = userService.getUserById(id);
         actualUser.setUsername(user.getUsername());
-        actualUser.setPassword(user.getPassword());
+        actualUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         List<Role> roleList = new ArrayList<>();
         for (String roleName : roles) {
             Role role = roleService.getRole(roleName);
@@ -86,13 +90,16 @@ public class AdminController {
             }
         }
         actualUser.setRoles(roleList);
+        actualUser.setAge(user.getAge());
+        actualUser.setCountry(user.getCountry());
+        actualUser.setName(user.getName());
         userService.update(actualUser);
         System.out.println("Конец метода обновления");
         return "redirect:/admin";
     }
 
-    @PostMapping("delete")
-    public String deleteUser(@RequestParam Long id) {
+    @PostMapping("delete/{id}")
+    public String deleteUser(@PathVariable("id") Long id) {
         userService.delete(id);
         return "redirect:/admin";
     }
