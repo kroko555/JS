@@ -38,9 +38,9 @@
 
 <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-sm-2" href="/admin">
-        <span class="font-weight-bold" th:utext="${user.username}">USERNAME</span>
+        <span class="font-weight-bold" id="headerUsername"></span>
         <span class="font-weight-normal"> with roles: </span>
-        <span class="font-weight-normal" th:text="${user.getRolesToString()}">ROLE</span>
+        <span class="font-weight-normal" id="headerRoles"></span>
     </a>
     <ul class="navbar-nav px-3">
         <li class="nav-item text-right">
@@ -48,6 +48,8 @@
         </li>
     </ul>
 </nav>
+</br>
+</br>
 
 <div class="container-fluid">
     <div class="row">
@@ -55,7 +57,7 @@
             <div class="bg-white vh-100">
                 <nav class="nav nav-pills nav-fill nav flex-column mt-3">
                     <a class="nav-link active" data-toggle="tab" href="#userCurrent">Admin</a>
-                    <a class="nav-link " data-toggle="tab" href="#user">User</a>
+                    <a class="nav-link " data-toggle="tab" href="#userPanel">User</a>
                 </nav>
             </div>
         </div>
@@ -95,8 +97,8 @@
                                                 <th style="text-align: center;">Delete</th>
                                             </tr>
                                             </thead>
-                                            <tbody>
-                                            <tr th:each="user : ${users}">
+                                            <tbody id="tbodyAllUserTable">
+                                            <!--<tr th:each="user : ${users}">
                                                 <td th:text="${user.getName()}">Name</td>
                                                 <td th:text="${user.getCountry()}">Country</td>
                                                 <td th:text="${user.getAge()}">Age</td>
@@ -289,10 +291,9 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                            </tr>
+                                            </tr>-->
                                             </tbody>
                                         </table>
-
                                     </div>
                                     <div class="tab-pane fade" id="newUser">
                                         <div class="card">
@@ -301,63 +302,64 @@
                                             </div>
                                             <div class="card-body">
                                                 <div class="text-center container">
-                                                    <form style="width:390px; margin: auto" th:method="POST"
-                                                          th:action="@{/admin/addUser}" th:object="${user}">
+                                                    <form id="formNewUser" name="formNewUser">
+                                                        <p>
+                                                            <label class="container-fluid" for="newUsername"><strong>Username</strong>
+                                                                <input class="form-control"
+                                                                       type="text"
+                                                                       name="username"
+                                                                       id="newUsername"/>
+                                                            </label>
+                                                        </p>
+                                                        <p>
+                                                            <label class="container-fluid" for="newName"><strong>Name</strong>
+                                                                <input class="form-control"
+                                                                       type="text"
+                                                                       name="name"
+                                                                       id="newName"/>
+                                                            </label>
+                                                        </p>
 
-                                                        <label for="newName"><b>Name</b></label>
-                                                        <input type="text" class="form-control"
-                                                               th:field="${user.name}" id="newName">
-                                                        <div class="invalid-feedback">
-                                                            Please enter a valid firstname for shipping updates.
-                                                        </div>
-                                                        <br/>
+                                                        <p>
+                                                            <label class="container-fluid" for="newCountry"><strong>Country</strong>
+                                                                <input class="form-control"
+                                                                       type="text"
+                                                                       name="country"
+                                                                       id="newCountry"/>
+                                                            </label>
+                                                        </p>
 
-                                                        <label for="newCountry"><b>Country</b></label>
-                                                        <input type="text" class="form-control"
-                                                               th:field="${user.country}" id="newCountry">
-                                                        <div class="invalid-feedback">
-                                                            Please enter a valid lastname for shipping updates.
-                                                        </div>
-                                                        <br/>
+                                                        <p>
+                                                            <label class="container-fluid" for="newCountry"><strong>Age</strong>
+                                                                <input class="form-control"
+                                                                       type="text"
+                                                                       name="age"
+                                                                       id="newAge"/>
+                                                            </label>
+                                                        </p>
 
-                                                        <label for="newAge"><b>Age</b></label>
-                                                        <input type="text" class="form-control"
-                                                               th:field="${user.age}" id="newAge">
-                                                        <div class="invalid-feedback">
-                                                            Please enter a valid age for shipping updates.
-                                                        </div>
-                                                        <br/>
+                                                        <p>
+                                                            <label class="container-fluid" for="newCountry"><strong>Password</strong>
+                                                                <input class="form-control"
+                                                                       type="text"
+                                                                       name="password"
+                                                                       id="newPassword"/>
+                                                            </label>
+                                                        </p>
 
-                                                        <label for="newUsername"><b>Email</b></label>
-                                                        <input type="text" class="form-control"
-                                                               th:field="${user.username}" id="newUsername">
-                                                        <div class="invalid-feedback">
-                                                            Please enter a valid email for shipping updates.
-                                                        </div>
-                                                        <br/>
-
-                                                        <label for="newPassword"><b>Password</b></label>
-                                                        <input type="text" class="form-control"
-                                                               th:field="${user.password}" id="newPassword">
-                                                        <div class="invalid-feedback">
-                                                            Please enter a valid password for shipping updates.
-                                                        </div>
-                                                        <br/>
-
-                                                        <div class="form-group">
-                                                            <label for="newRoles" class="form-label">Выберите
-                                                                роли:</label>
-                                                            <select name="rolesList" th:field="*{roles}" id="newRoles"
-                                                                    class="form-control" multiple>
-                                                                <option th:value="'ROLE_ADMIN'"
-                                                                        th:text="ADMIN"></option>
-                                                                <option th:value="'ROLE_USER'" th:text="USER"></option>
+                                                        <label class="container-fluid"
+                                                               for="newUserRoles"><strong>Role</strong>
+                                                            <select id="newUserRoles"
+                                                                    class="form-control"
+                                                                    name="roles"
+                                                                    multiple
+                                                                    size="2">
                                                             </select>
-                                                        </div>
+                                                        </label>
 
-                                                        <input type="submit" class="btn btn-success"
-                                                               value="Add new user">
-
+                                                        <button type="submit"
+                                                                id="newUserButton"
+                                                                class="btn btn-success">Add new user</button>
                                                     </form>
                                                 </div>
                                                 <br/>
@@ -369,46 +371,219 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="user">
-                    <div class="col-sm-12 p-3">
-                        <h1>User information page</h1>
-                    </div>
+                <div class="tab-pane fade" id="userPanel">
+                    <h2>User information-page</h2>
                     <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title br-light">About user</h4>
-                        </div>
-                        <div class="card-body tab-content table-striped table-responsive">
-                            <tr>
-                                <td>
-                                    <form th:method="GET" th:object="${user}">
-                                        <table class="table table-header table-hover bg-white" th:cols="9">
-                                            <thead class="thead align-content-center">
-                                            <tr class="b">
-                                                <th>Id</th>
-                                                <th>Name</th>
-                                                <th>Country</th>
-                                                <th>Age</th>
-                                                <th>Roles</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td th:utext="${user.getId}">id</td>
-                                                <td th:utext="${user.getName()}">Name</td>
-                                                <td th:utext="${user.getCountry()}">Country</td>
-                                                <td th:utext="${user.getAge()}">Age</td>
-                                                <td><span th:each="roles : ${user.getRoles()}"
-                                                          th:utext="${roles.toString()}+'<br>  '">Roles</span></td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </form>
-                                </td>
-                            </tr>
+                        <h5 class="card-header">About user</h5>
+                        <div class="card-body text-center">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Country</th>
+                                    <th>Age</th>
+                                    <th>Roles</th>
+                                </tr>
+                                </thead>
+                                <tbody id="userPanelBody">
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="edit" tabindex="-1" role="dialog"
+     aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="formEditUser">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit user</h5>
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="form-group required">
+                        <div class="controls">
+                            <p>
+                                <label for="idEditUser"><strong>ID</strong>
+                                    <input class="form-control"
+                                           type="number"
+                                           name="id"
+                                           id="idEditUser"
+                                           disabled/>
+                                </label>
+                            </p>
+                            <p>
+                                <label for="userNameEditUser"><strong>Username</strong>
+                                    <input class="form-control"
+                                           type="text"
+                                           name="username"
+                                           id="userNameEditUser" />
+                                </label>
+                            </p>
+                            <p>
+                                <label for="nameEditUser"><strong>Name</strong>
+                                    <input class="form-control"
+                                           type="text"
+                                           name="name"
+                                           id="nameEditUser" />
+                                </label>
+                            </p>
+                            <p>
+                                <label for="ageEditUser"><strong>Age</strong>
+                                    <input class="form-control"
+                                           type="text"
+                                           name="age"
+                                           id="ageEditUser" />
+                                </label>
+                            </p>
+                            <p>
+                                <label for="countryEditUser"><strong>Country</strong>
+                                    <input class="form-control"
+                                           type="text"
+                                           name="country"
+                                           id="countryEditUser" />
+                                </label>
+                            </p>
+                            <p>
+                                <label for="passwordEditUser"><strong>Password</strong>
+                                    <input class="form-control"
+                                           type="password"
+                                           name="password"
+                                           id="passwordEditUser"
+                                           disabled/>
+                                </label>
+                            </p>
+                            <label class="container-fluid col-6" for="rolesEditUser"><strong>Role</strong>
+                                <select class="form-control"
+                                        id="rolesEditUser"
+                                        name="roles"
+                                        multiple
+                                        size="2">
+
+                                </select>
+                            </label>
+                            <h1></h1>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button"
+                                    id="editFormCloseButton"
+                                    class="btn btn-secondary"
+                                    data-dismiss="modal">Close</button>
+                            <button type="submit"
+                                    class="btn btn-primary">Edit</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade"
+     id="delete"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="deleteModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog"
+         role="document">
+        <div class="modal-content">
+            <form id="formDeleteUser">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete user</h5>
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="form-group required">
+                        <div class="controls">
+                            <p>
+                                <label for="idDeleteUser"><strong>ID</strong>
+                                    <input class="form-control"
+                                           type="number"
+                                           name="id"
+                                           id="idDeleteUser"
+                                           disabled/>
+                                </label>
+                            </p>
+                            <p>
+                                <label for="usernameDeleteUser"><strong>Username</strong>
+                                    <input class="form-control"
+                                           type="text"
+                                           name="username"
+                                           id="usernameDeleteUser" />
+                                </label>
+                            </p>
+                            <p>
+                                <label for="nameDeleteUser"><strong>Name</strong>
+                                    <input class="form-control"
+                                           type="text"
+                                           name="name"
+                                           id="nameDeleteUser" />
+                                </label>
+                            </p>
+                            <p>
+                                <label for="ageDeleteUser"><strong>Age</strong>
+                                    <input class="form-control"
+                                           type="text"
+                                           name="age"
+                                           id="ageDeleteUser" />
+                                </label>
+                            </p>
+                            <p>
+                                <label for="countryDeleteUser"><strong>Country</strong>
+                                    <input class="form-control"
+                                           type="text"
+                                           name="country"
+                                           id="countryDeleteUser" />
+                                </label>
+                            </p>
+                            <p>
+                                <label for="passwordDeleteUser"><strong>Password</strong>
+                                    <input class="form-control"
+                                           type="password"
+                                           name="password"
+                                           id="passwordDeleteUser"
+                                           required/>
+                                </label>
+                            </p>
+                            <label class="container-fluid col-6" for="rolesDeleteUser"><strong>Role</strong>
+                                <select class="form-control"
+                                        id="rolesDeleteUser"
+                                        name="roles"
+                                        multiple
+                                        size="2"
+                                        disabled>
+                                </select>
+                            </label>
+                            <h1></h1>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button"
+                                    id="deleteFormCloseButton"
+                                    class="btn btn-secondary"
+                                    data-dismiss="modal">Close</button>
+                            <button type="submit"
+                                    class="btn btn-danger btn btn-primary">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -424,10 +599,14 @@
         crossorigin="anonymous"></script>
 
 
-<script>
-    document.getElementById('Droles').addEventListener('focus', function () {
-        this.blur();
-    });
-</script>
+
+<script type="text/javascript" src="/addUser.js" defer ></script>
+<script type="text/javascript" src="/Users.js" defer ></script>
+<script type="text/javascript" src="/delete.js" defer ></script>
+<script type="text/javascript" src="/deleteUser.js" defer ></script>
+<script type="text/javascript" src="/edit.js" defer ></script>
+<script type="text/javascript" src="/editUser.js" defer ></script>
+<script type="text/javascript" src="/user.js" defer ></script>
+
 </body>
 </html>

@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private RoleService roleService;
@@ -65,5 +66,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserByUsername(String username) {
         return userDao.findUserByUsername(username);
+    }
+
+    @Override
+    public void add(User user) {
+        userDao.add(user);
     }
 }

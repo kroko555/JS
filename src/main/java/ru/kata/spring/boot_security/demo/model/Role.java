@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,6 +18,7 @@ public class Role implements GrantedAuthority {
     private Long id;
     @Column
     private String roleName;
+    @JsonIgnore
     @ManyToMany(mappedBy = "roles")
     private List<User> users;
 

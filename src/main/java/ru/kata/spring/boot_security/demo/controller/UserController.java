@@ -1,4 +1,4 @@
-package ru.kata.spring.boot_security.demo.controller;
+/*package ru.kata.spring.boot_security.demo.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,4 +28,4 @@ public class UserController {
         model.addAttribute("user", user);
         return "user2";
     }
-}
+}*/
