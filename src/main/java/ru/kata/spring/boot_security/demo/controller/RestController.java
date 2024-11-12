@@ -1,6 +1,5 @@
 package ru.kata.spring.boot_security.demo.controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 
-@org.springframework.web.bind.annotation.RestController
+@Controller
 @RequestMapping("/api")
 public class RestController {
 
@@ -33,6 +32,7 @@ public class RestController {
         this.roleService = roleService;
     }
 
+    @ResponseBody
     @GetMapping("/users")
     public ResponseEntity<Set<User>> showAllUsers() {
         List<User> userList = userService.getUsers();
@@ -43,6 +43,7 @@ public class RestController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
+    @ResponseBody
     @GetMapping("/users/{id}")
     public ResponseEntity<UserDetails> showUser(@PathVariable long id) {
         UserDetails user = userService.findUserByUsername(userService.getUserById(id).getUsername());
@@ -52,24 +53,28 @@ public class RestController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    @ResponseBody
     @PostMapping("/users")
     public ResponseEntity<User> addNewUser(@RequestBody User user) {
         userService.add(user);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
+    @ResponseBody
     @PutMapping("/users/{id}")
     public ResponseEntity<User> updateUser(@RequestBody User user) {
         userService.update(user);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @ResponseBody
     @DeleteMapping("/users/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable("id") long id) {
         userService.delete(id);
         return ResponseEntity.ok().build();
     }
 
+    @ResponseBody
     @GetMapping("/viewUser")
     public ResponseEntity<User> showUser(Authentication auth) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
@@ -77,6 +82,7 @@ public class RestController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    @ResponseBody
     @GetMapping("/roles")
     public ResponseEntity<List<Role>> getAllRoles() {
         return new ResponseEntity<>(roleService.getAllRoles(), HttpStatus.OK);
